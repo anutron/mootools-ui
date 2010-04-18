@@ -33,9 +33,8 @@ Widget.implement({
 		
 		this.canvas = new ART;
 		$(this.canvas).setStyles({position: 'absolute', top: 0, left: 0}).inject(this.element);
-		this.currentSheet = {};
 		
-		this.setTabIndex(this.options.tabIndex);
+		this.currentSheet = {};
 		
 		var self = this;
 		
@@ -52,6 +51,7 @@ Widget.implement({
 		});
 		
 		this.parent(options);
+		this.setTabIndex(this.options.tabIndex);
 		
 		widgets.push(this);
 		
