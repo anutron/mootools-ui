@@ -35,6 +35,13 @@ var Widget = UI.Widget = new Class({
 		var uid = ART.uniqueID();
 		widgets[uid] = this;
 		
+		if (options) {
+			if (options.parentWidget) {
+				parent = options.parentWidget;
+				delete options.parentWidget;
+			}
+		}
+		
 		this.setOptions(options);
 		if (this.options.id) this.setID(this.options.id);
 
@@ -47,6 +54,7 @@ var Widget = UI.Widget = new Class({
 		this._childWidgets = [];
 		
 		this.states = {disabled: false, focus: false, active: false};
+		if (parent) this.inject(parent);
 	},
 	
 	/* ID */
