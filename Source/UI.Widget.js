@@ -18,6 +18,15 @@ var Widget = UI.Widget = new Class({
 	name: 'widget',
 	
 	options: {
+		/*
+			onFocus: $empty,
+			onBlur: $empty,
+			onEnable: $empty,
+			onDisable: $empty,
+			onInject: $empty(injectedWidget),
+			onEject: $empty(parentWidget),
+			parentWidgte: null,
+		*/
 		id: '',
 		className: ''
 	},
