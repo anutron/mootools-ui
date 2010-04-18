@@ -12,6 +12,9 @@ provides: ART.Widget
 var Widget = ART.Widget = new Class({
 	Extends: UI.Widget,
 	options: {
+		/*
+			element: null,
+		*/
 		tabIndex: -1
 	}
 });
@@ -21,7 +24,13 @@ var widgets = ART.widgets = [];
 Widget.implement({
 	
 	initialize: function(options){
-		this.element = new Element('div').setStyles({display: 'inline-block', position: 'relative', outline: 'none'});
+		this.element = this.options.element || new Element('div');
+		
+		this.element.setStyles({
+			position: 'relative', 
+			outline: 'none'
+		}).store(this.prefix, this).store('widget', this);
+		
 		this.canvas = new ART;
 		$(this.canvas).setStyles({position: 'absolute', top: 0, left: 0}).inject(this.element);
 		this.currentSheet = {};
