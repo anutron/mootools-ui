@@ -83,6 +83,7 @@ Widget.implement({
 	},
 	
 	deferDraw: function(){
+		if (this._states.destroyed) return;
 		var self = this;
 		clearTimeout(this.drawTimer);
 		this.drawTimer = setTimeout(function(){
