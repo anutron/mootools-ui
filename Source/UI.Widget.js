@@ -55,8 +55,6 @@ var Widget = UI.Widget = new Class({
 		this._parentWidget = null;
 		this._childWidgets = [];
 		
-		this._states = {disabled: false, focus: false, active: false, destroyed: false};
-
 		if (parent) this.inject(parent);
 	},
 	
@@ -81,6 +79,25 @@ var Widget = UI.Widget = new Class({
 	
 	hasClass: function(className){
 		return this._classNames.contains(className);
+	},
+	
+	/*
+		states
+	*/
+	
+	_states: {
+		disabled: false,
+		focus: false,
+		active: false,
+		destroyed: false
+	},
+	
+	setState: function(name, state) {
+		this._states[name] = state;
+	},
+
+	getState: function(name) {
+		return this._states[name];
 	},
 	
 	/* enable, disable */
