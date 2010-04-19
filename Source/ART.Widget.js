@@ -51,6 +51,10 @@ Widget.implement({
 			
 		});
 		
+		//integration point for keyboard setup; has to be done before the options are called
+		//because the options may contain a keyboard instance, and we'll get a recurrsion error
+		if (this._keyboardSetup) this._keyboardSetup(options);
+		
 		this.parent(options);
 		this.setTabIndex(this.options.tabIndex);
 		
