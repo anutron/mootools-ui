@@ -35,7 +35,7 @@ var Widget = UI.Widget = new Class({
 	initialize: function(options){
 		var uid = ART.uniqueID();
 		widgets[uid] = this;
-		
+
 		var parent;
 		if (options) {
 			if (options.parentWidget) {
@@ -54,10 +54,10 @@ var Widget = UI.Widget = new Class({
 
 		this._parentWidget = null;
 		this._childWidgets = [];
-		
+
 		if (parent) this.inject(parent);
 	},
-	
+
 	/* ID */
 	
 	setID: function(id){

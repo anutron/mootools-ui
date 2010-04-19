@@ -15,7 +15,8 @@ var Widget = ART.Widget = new Class({
 		/*
 			element: null,
 		*/
-		tabIndex: -1
+		tabIndex: -1,
+		renderWhileHidden: false
 	}
 });
 	
@@ -83,7 +84,7 @@ Widget.implement({
 	},
 	
 	deferDraw: function(){
-		if (this._states.destroyed) return;
+		if (this._states.destroyed || (!this.options.renderWhileHidden && this.getState('hidden'))) return;
 		var self = this;
 		clearTimeout(this.drawTimer);
 		this.drawTimer = setTimeout(function(){
@@ -118,6 +119,10 @@ Widget.implement({
 	},
 	
 	/* states */
+	
+	_states: {
+		hidden: false
+	},
 	
 	enable: function(){
 		if (!this.parent()) return false;
@@ -158,6 +163,24 @@ Widget.implement({
 		if (!this.parent()) return false;
 		this.deferDraw();
 		return true;
+	},
+	
+	hide: function(){
+		if (!this.getState('hidden')){
+			this.setState('hidden', true);
+			this.fireEvent('hide');
+			this.deferDraw();
+		}
+		return this;
+	},
+	
+	show: function(){
+		if (this.getState('hidden')){
+			this.setState('hidden', false);
+			this.fireEvent('hide');
+			this.deferDraw();
+		}
+		return this;
 	},
 	
 	destroy: function(){
