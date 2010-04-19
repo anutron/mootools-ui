@@ -9,15 +9,15 @@ provides: ART.Sheet
 
 ART.Sheet = {
 
-	define: function(name, properties){
-		UI.Sheet.define(name, properties);
+	define: function(name, properties, namespace){
+		UI.Sheet.define(name, properties, namespace);
 		ART.widgets.each(function(widget){
 			widget.deferDraw();
 		});
 	},
 	
-	lookup: function(name){
-		return UI.Sheet.lookup(name);
+	lookup: function(name, namespace){
+		return UI.Sheet.lookup(name, namespace);
 	}
 
 };
