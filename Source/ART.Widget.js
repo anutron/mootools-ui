@@ -159,6 +159,10 @@ Widget.implement({
 		return true;
 	},
 	
+	destroy: function(){
+		this.parent();
+		this.element.destroy();
+	},
 	/* $ */
 	
 	toElement: function(){

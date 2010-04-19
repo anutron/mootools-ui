@@ -25,6 +25,7 @@ var Widget = UI.Widget = new Class({
 			onDisable: $empty,
 			onInject: $empty(injectedWidget),
 			onEject: $empty(parentWidget),
+			destroy: $empty,
 			parentWidgte: null,
 		*/
 		id: '',
@@ -35,6 +36,7 @@ var Widget = UI.Widget = new Class({
 		var uid = ART.uniqueID();
 		widgets[uid] = this;
 		
+		var parent;
 		if (options) {
 			if (options.parentWidget) {
 				parent = options.parentWidget;
@@ -53,7 +55,8 @@ var Widget = UI.Widget = new Class({
 		this._parentWidget = null;
 		this._childWidgets = [];
 		
-		this._states = {disabled: false, focus: false, active: false};
+		this._states = {disabled: false, focus: false, active: false, destroyed: false};
+
 		if (parent) this.inject(parent);
 	},
 	
@@ -212,7 +215,30 @@ var Widget = UI.Widget = new Class({
 	getChildren: function(){
 		return this._childWidgets;
 	},
-	
+
+	/* destruction */
+
+	destroy: function(){
+		this.eject();
+
+		this._childWidgets.each(function(widget) {
+			widget.destroy();
+		});
+
+		if (this.childWidgets.length && window.console && console.warn) {
+			this.childWidgets.each(function(widget) {
+				console.warn("warning: %s called the destroy method of %s but it failed. Ensure that destroy method calls this.parent", this.prefix, widget.prefix);
+			}, this);
+		}
+
+		this.states.destroyed = true;
+		return this.fireEvent('destroy');
+	},
+
+	isDestroyed: function(){
+		return this.states.destroyed;
+	},
+
 	/* Sheet integration */
 	
 	getSheet: function(){
