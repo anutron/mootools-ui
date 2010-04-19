@@ -41,11 +41,11 @@ Widget.implement({
 		this.element.addEvents({
 
 			focus: function(){
-				if (!self.isFocused()) self.focus();
+				if (!self.getState('focus')) self.focus();
 			},
 
 			blur: function(){
-				if (self.isFocused()) self.blur();
+				if (self.getState('focus')) self.blur();
 			}
 			
 		});

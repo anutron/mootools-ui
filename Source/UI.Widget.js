@@ -104,9 +104,9 @@ var Widget = UI.Widget = new Class({
 	
 	enable: function(){
 		var parentWidget = this.getParent();
-		if ((parentWidget && parentWidget.states.disabled) || !this._states.disabled) return false;
+		if ((parentWidget && parentWidget.getState('disabled')) || !this.getState('disabled')) return false;
 		this._disabledByParent = false;
-		this._states.disabled = false;
+		this.setState('disabled', false);
 		this.fireEvent('enable');
 		
 		this._childWidgets.each(function(child){
@@ -117,11 +117,11 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	disable: function(){
-		if (this._states.disabled) return false;
+		if (this.getState('disabled')) return false;
 		
 		this.blur();
 		this.deactivate();
-		this._states.disabled = true;
+		this.setState('disabled', true);;
 		this.fireEvent('disable');
 					
 		this._childWidgets.each(function(child){
@@ -134,15 +134,12 @@ var Widget = UI.Widget = new Class({
 		return true;
 	},
 	
-	isDisabled: function(){
-		return this._states.disabled;
-	},
-	
 	/* focus, blur */
 	
 	focus: function(){
-		if (this._states.disabled || this._states.focus) return false;
-		this._states.focus = true;
+		if (this.getState('disabled') || this.getState('focus')) return false;
+
+		this.setState('focus', true);
 		this.fireEvent('focus');
 		
 		for (var w in widgets){
@@ -154,9 +151,9 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	blur: function(){
-		if (this._states.disabled || !this._states.focus) return false;
+		if (this.getState('disabled') || !this.getState('focus')) return false;
 
-		this._states.focus = false;
+		this.setState('focus', false);
 		this.fireEvent('blur');
 		
 		this._childWidgets.each(function(child){
@@ -166,16 +163,12 @@ var Widget = UI.Widget = new Class({
 		return true;
 	},
 	
-	isFocused: function(){
-		return this._states.focus;
-	},
-	
 	/* activate, deactivate */
 	
 	activate: function(){
-		if (this._states.disabled || this._states.active) return false;
+		if (this.getState('disabled') || this.getState('active')) return false;
 		this.focus();
-		this._states.active = true;
+		this.setState('active', true);
 		
 		this.fireEvent('active');
 		
@@ -183,15 +176,11 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	deactivate: function(){
-		if (this._states.disabled || !this._states.active) return false;
-		this._states.active = false;
+		if (this.getState('disabled') || !this.getState('active')) return false;
+		this.setState('active', false);
 		this.fireEvent('inactive');
 		
 		return true;
-	},
-	
-	isActive: function(){
-		return this._states.active;
 	},
 
 	/* child & parent relationship */
