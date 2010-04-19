@@ -45,7 +45,7 @@ var Widget = UI.Widget = new Class({
 		this.setOptions(options);
 		if (this.options.id) this.setID(this.options.id);
 
-		this.classNames = [];
+		this._classNames = [];
 		if (this.options.className) this.options.className.split(' ').each(function(className){
 			this.addClass(className);
 		}, this);
@@ -53,7 +53,7 @@ var Widget = UI.Widget = new Class({
 		this._parentWidget = null;
 		this._childWidgets = [];
 		
-		this.states = {disabled: false, focus: false, active: false};
+		this._states = {disabled: false, focus: false, active: false};
 		if (parent) this.inject(parent);
 	},
 	
@@ -67,26 +67,26 @@ var Widget = UI.Widget = new Class({
 	/* classNames */
 	
 	addClass: function(className){
-		this.classNames.push(className);
+		this._classNames.push(className);
 		return this;
 	},
 	
 	removeClass: function(className){
-		this.classNames.erase(className);
+		this._classNames.erase(className);
 		return this;
 	},
 	
 	hasClass: function(className){
-		return this.classNames.contains(className);
+		return this._classNames.contains(className);
 	},
 	
 	/* enable, disable */
 	
 	enable: function(){
 		var parentWidget = this.getParent();
-		if ((parentWidget && parentWidget.states.disabled) || !this.states.disabled) return false;
+		if ((parentWidget && parentWidget.states.disabled) || !this._states.disabled) return false;
 		this._disabledByParent = false;
-		this.states.disabled = false;
+		this._states.disabled = false;
 		this.fireEvent('enable');
 		
 		this._childWidgets.each(function(child){
@@ -97,11 +97,11 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	disable: function(){
-		if (this.states.disabled) return false;
+		if (this._states.disabled) return false;
 		
 		this.blur();
 		this.deactivate();
-		this.states.disabled = true;
+		this._states.disabled = true;
 		this.fireEvent('disable');
 					
 		this._childWidgets.each(function(child){
@@ -115,14 +115,14 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	isDisabled: function(){
-		return this.states.disabled;
+		return this._states.disabled;
 	},
 	
 	/* focus, blur */
 	
 	focus: function(){
-		if (this.states.disabled || this.states.focus) return false;
-		this.states.focus = true;
+		if (this._states.disabled || this._states.focus) return false;
+		this._states.focus = true;
 		this.fireEvent('focus');
 		
 		for (var w in widgets){
@@ -134,9 +134,9 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	blur: function(){
-		if (this.states.disabled || !this.states.focus) return false;
+		if (this._states.disabled || !this._states.focus) return false;
 
-		this.states.focus = false;
+		this._states.focus = false;
 		this.fireEvent('blur');
 		
 		this._childWidgets.each(function(child){
@@ -147,15 +147,15 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	isFocused: function(){
-		return this.states.focus;
+		return this._states.focus;
 	},
 	
 	/* activate, deactivate */
 	
 	activate: function(){
-		if (this.states.disabled || this.states.active) return false;
+		if (this._states.disabled || this._states.active) return false;
 		this.focus();
-		this.states.active = true;
+		this._states.active = true;
 		
 		this.fireEvent('active');
 		
@@ -163,17 +163,17 @@ var Widget = UI.Widget = new Class({
 	},
 	
 	deactivate: function(){
-		if (this.states.disabled || !this.states.active) return false;
-		this.states.active = false;
+		if (this._states.disabled || !this._states.active) return false;
+		this._states.active = false;
 		this.fireEvent('inactive');
 		
 		return true;
 	},
 	
 	isActive: function(){
-		return this.states.active;
+		return this._states.active;
 	},
-	
+
 	/* child & parent relationship */
 	
 	inject: function(widget){
@@ -242,10 +242,10 @@ Widget.prototype.toString = function(){
 	var string = '';
 	if (this.name) string += this.name;
 	if (this.id) string += "#" + this.id;
-	if (this.classNames.length) string += '.' + this.classNames.join('.');
+	if (this._classNames.length) string += '.' + this._classNames.join('.');
 
-	for (var s in this.states){
-		if (this.states[s]) string += ':' + s;
+	for (var s in this._states){
+		if (this._states[s]) string += ':' + s;
 	}
 	
 	var parentWidget = this.getParent();
